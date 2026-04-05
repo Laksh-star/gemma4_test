@@ -52,6 +52,8 @@ The most important runtime finding was that the model frequently spent a large s
 
 LM Studio version was not captured during the session, so this repo should be read as a report of one concrete tested environment, not a blanket claim about every LM Studio release.
 
+This benchmark reflects one practical local setup: `google/gemma-4-26b-a4b` running as a quantized model in LM Studio on an Apple M4 Mac mini with 24 GB RAM. These findings should be read as results from this specific deployment, not as a universal ceiling on Gemma 4 performance across other quantizations, runtimes, or hardware profiles.
+
 ## Files
 
 - [index.html](index.html): visual one-page report in the repo root
