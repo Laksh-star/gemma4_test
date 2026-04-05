@@ -1,4 +1,4 @@
-# Gemma 4 LM Studio Companion
+# Gemma 4 LM Studio Benchmark
 
 This repository is the companion to a hands-on evaluation of `google/gemma-4-26b-a4b` running locally in LM Studio.
 
