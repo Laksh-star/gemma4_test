@@ -1,0 +1,60 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T16:57:42",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 1024,
+  "timeout_seconds": 300.0,
+  "test_case": {
+    "test_id": "multilingual",
+    "category": "Core Text",
+    "name": "Multilingual translation",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "You are a careful multilingual editor.",
+    "user_prompt": "Translate this into:\n1) Telugu\n2) Hindi\n3) Formal business English\n\nSentence:\n\"We need a practical AI pilot that improves newsroom speed without disrupting editorial judgment.\"\n\nAlso give one-line nuance notes for each version.",
+    "expected": [
+      "Meaning preserved across languages",
+      "Natural, not literal phrasing",
+      "Nuance notes are distinct"
+    ],
+    "scoring_focus": "Meaning preservation and naturalness.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": false,
+    "is_experimental": false
+  },
+  "response_text": "Here are the translations of your sentence:\n\n### 1) Telugu\n**ఎడిటోరియల్ నిర్ణయాలకు ఆటంకం కలగకుండా, న్యూస్‌రూమ్ పని వేగాన్ని పెంచే ఒక ఆచరణాత్మక AI పైలట్ మాకు అవసరం.**\n*   **Nuance Note:** Uses \"ఆటంకం కలగకుండా\" (without causing hindrance) to capture the professional essence of not disrupting established processes.\n\n### 2) Hindi\n**हमें एक ऐसे व्यावहारिक एआई पायलट की आवश्यकता है जो संपादकीय निर्णय को बाधित किए बिना न्यूज़रूम की गति में सुधार कर सके।**\n*   **Nuance Note:** Employs \"बाधित किए बिना\" (without obstructing/interrupting) to maintain a formal, authoritative tone regarding editorial authority.\n\n### 3) Formal Business English\n**\"We require a pragmatic AI pilot program designed to enhance newsroom efficiency without compromising editorial integrity.\"**\n*   **Nuance Note:** Replaces \"practical\" with \"pragmatic\" and \"disrupting judgment\" with \"compromising integrity\" to suit an executive-level strategic context.",
+  "latency_ms": 51898,
+  "tool_trace": [],
+  "raw_response": {
+    "id": "chatcmpl-yhjfuwjx3on2hoooamt60b",
+    "object": "chat.completion",
+    "created": 1775388410,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Here are the translations of your sentence:\n\n### 1) Telugu\n**ఎడిటోరియల్ నిర్ణయాలకు ఆటంకం కలగకుండా, న్యూస్‌రూమ్ పని వేగాన్ని పెంచే ఒక ఆచరణాత్మక AI పైలట్ మాకు అవసరం.**\n*   **Nuance Note:** Uses \"ఆటంకం కలగకుండా\" (without causing hindrance) to capture the professional essence of not disrupting established processes.\n\n### 2) Hindi\n**हमें एक ऐसे व्यावहारिक एआई पायलट की आवश्यकता है जो संपादकीय निर्णय को बाधित किए बिना न्यूज़रूम की गति में सुधार कर सके।**\n*   **Nuance Note:** Employs \"बाधित किए बिना\" (without obstructing/interrupting) to maintain a formal, authoritative tone regarding editorial authority.\n\n### 3) Formal Business English\n**\"We require a pragmatic AI pilot program designed to enhance newsroom efficiency without compromising editorial integrity.\"**\n*   **Nuance Note:** Replaces \"practical\" with \"pragmatic\" and \"disrupting judgment\" with \"compromising integrity\" to suit an executive-level strategic context.",
+          "reasoning_content": "\n\n*   Source Sentence: \"We need a practical AI pilot that improves newsroom speed without disrupting editorial judgment.\"\n*   Key Components:\n    *   \"Practical AI pilot\": A real-world, usable trial/experiment with AI technology.\n    *   \"Improves newsroom speed\": Increases efficiency/velocity of news production.\n    *   \"Without disrupting\": Without interfering with or negatively affecting.\n    *   \"Editorial judgment\": The critical decision-making process of editors (quality control).\n\n    *   *Goal:* Natural, professional Telugu suitable for a business/tech context.\n    *   *Drafting:*\n        *   Practical AI pilot: ఆచరణాత్మకమైన AI పైలట్ (Acharanatmaka-main AI pilot) or ఉపయోగకరమైన AI ప్రయోగం (Upayogakaraina AI prayogam).\n        *   Improves newsroom speed: న్యూస్‌రూమ్ వేగాన్ని పెంచుతుంది (Newsroom veganni penchutundi).\n        *   Without disrupting editorial judgment: ఎడిటోరియల్ తీర్పును/నిర్ణయాలను ప్రభావితం చేయకుండా (Editorial tirpunu/nirnayalanu prabhavitam cheyakunda).\n    *   *Refining:* \"ఎడిటోరియల్ నిర్ణయాలకు ఆటంకం కలగకుండా, న్యూస్‌రూమ్ పని వేగాన్ని పెంచే ఒక ఆచరణాత్మక AI పైలట్ మాకు అవసరం.\" (We need a practical AI pilot that increases newsroom work speed without causing hindrance to editorial decisions.)\n    *   *Nuance Note:* Focuses on \"not causing hindrance\" (ఆటంకం కలగకుండా) to capture the essence of \"without disrupting.\"\n\n    *   *Goal:* Professional, formal Hindi.\n    *   *Drafting:*\n        *   Practical AI pilot: एक व्यावहारिक एआई पायलट (Ek vyavaharik AI pilot).\n        *   Improves newsroom speed: न्यूज़रूम की गति को बढ़ाता है (Newsroom ki gati ko badhata hai).\n        *   Without disrupting editorial judgment: संपादकीय निर्णय को प्रभावित किए बिना (Sampadkiya nirnay ko prabhavit kiye bina).\n    *   *Refining:* \"हमें एक ऐसे व्यावहारिक एआई पायलट की आवश्यकता है जो संपादकीय निर्णय को बाधित किए बिना न्यूज़रूम की गति में सुधार कर सके।\" (We need such a practical AI pilot that can improve newsroom speed without disrupting editorial judgment.)\n    *   *Nuance Note:* Uses \"बाधित किए बिना\" (without obstructing/disrupting) to maintain the professional tone.\n\n    *   *Goal:* High-level corporate/executive language.\n    *   *Drafting:*\n        *   Option A: We require a functional AI trial to enhance newsroom efficiency while preserving editorial integrity.\n        *   Option B: It is essential to implement a pragmatic AI pilot program designed to accelerate newsroom workflows without compromising editorial discretion.\n    *   *Selection:* \"We require a pragmatic AI pilot program designed to enhance newsroom efficiency without compromising editorial integrity.\" (This sounds most professional and captures the \"judgment\" aspect as \"integrity/discretion\").\n    *   *Nuance Note:* Uses \"pragmatic\" and \"compromising editorial integrity\" to elevate the tone for an executive audience.\n\n    *   Check against original meaning.\n    *   Ensure one-line nuance notes are provided.",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 962,
+      "total_tokens": 1035,
+      "completion_tokens_details": {
+        "reasoning_tokens": 724
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- No specialized auto-review for this test. Use manual scoring.\n- Response length: `925` characters"
+}

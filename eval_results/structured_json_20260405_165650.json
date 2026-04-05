@@ -1,0 +1,60 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T16:56:50",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 1024,
+  "timeout_seconds": 300.0,
+  "test_case": {
+    "test_id": "structured_json",
+    "category": "Core Text",
+    "name": "Structured JSON",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "Return only the requested output.",
+    "user_prompt": "Return ONLY valid JSON.\n\nTask:\nClassify the following support request.\n\nText:\n\"My screen becomes blurry after long monitor use, but it improves after blinking and using lubricant drops.\"\n\nSchema:\n{\n  \"category\": \"one of [dry_eye, refractive_issue, urgent_eye_issue, unknown]\",\n  \"urgency\": \"one of [low, medium, high]\",\n  \"reason\": \"string under 25 words\",\n  \"suggested_next_step\": \"string under 20 words\"\n}",
+    "expected": [
+      "Parses as JSON",
+      "Contains only the requested keys",
+      "No markdown code fences"
+    ],
+    "scoring_focus": "Format discipline and schema compliance.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": false,
+    "is_experimental": false
+  },
+  "response_text": "```json\n{\n  \"category\": \"dry_eye\",\n  \"urgency\": \"low\",\n  \"reason\": \"Symptoms improve with blinking and lubrication, which are characteristic of dry eye from screen use.\",\n  \"suggested_next_step\": \"Follow the 20-20-20 rule and continue using lubricant drops.\"\n}\n```",
+  "latency_ms": 35293,
+  "tool_trace": [],
+  "raw_response": {
+    "id": "chatcmpl-njlmga71tdk01iihj5mx57l",
+    "object": "chat.completion",
+    "created": 1775388375,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"category\": \"dry_eye\",\n  \"urgency\": \"low\",\n  \"reason\": \"Symptoms improve with blinking and lubrication, which are characteristic of dry eye from screen use.\",\n  \"suggested_next_step\": \"Follow the 20-20-20 rule and continue using lubricant drops.\"\n}\n```",
+          "reasoning_content": "\n*   Input text: \"My screen becomes blurry after long monitor use, but it improves after blinking and using lubricant drops.\"\n    *   Task: Classify the support request.\n    *   Output format: ONLY valid JSON.\n    *   Schema requirements:\n        *   `category`: one of [dry_eye, refractive_issue, urgent_eye_issue, unknown]\n        *   `urgency`: one of [low, medium, high]\n        *   `reason`: string < 25 words\n        *   `suggested_next_step`: string < 20 words\n\n    *   Symptoms: Blurry vision after long monitor use, improves with blinking and lubricant drops.\n    *   Analysis: The improvement with lubrication/blinking strongly suggests dry eye syndrome (common with digital eye strain). It's not an urgent issue (no sudden loss of vision or pain mentioned), nor is it purely refractive (which usually requires glasses/lenses and doesn't change with blinking).\n\n    *   `category`: \"dry_eye\"\n    *   `urgency`: \"low\" (it's a chronic-style discomfort related to usage, not an emergency)\n    *   `reason`: Symptoms improve with lubrication and are linked to prolonged screen use.\n    *   `suggested_next_step`: Use the 20-20-20 rule and continue using prescribed eye drops.\n\n    *   JSON format? Yes.\n    *   Category valid? \"dry_eye\" is in list.\n    *   Urgency valid? \"low\" is in list.\n    *   Reason < 25 words? \"Symptoms improve with lubrication and are linked to prolonged screen use.\" (11 words) - OK.\n    *   Suggested next step < 20 words? \"Follow the 20-20-20 rule and continue using lubricant drops.\" (10 words) - OK.\n\n    ```json\n    {\n      \"category\": \"dry_eye\",\n      \"urgency\": \"low\",\n      \"reason\": \"Symptoms improve with blinking and lubrication, typical of digital eye strain.\",\n      \"suggested_next_step\": \"Follow the 20-20-20 rule and use prescribed lubricant drops.\"\n    }\n    ```",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 140,
+      "completion_tokens": 579,
+      "total_tokens": 719,
+      "completion_tokens_details": {
+        "reasoning_tokens": 496
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- JSON parse: `failed` (Expecting value: line 1 column 1 (char 0))\n- Contains code fence: `yes`\n- Response length: `264` characters"
+}

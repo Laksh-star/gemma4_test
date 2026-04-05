@@ -1,0 +1,60 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T16:55:27",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 1024,
+  "timeout_seconds": 300.0,
+  "test_case": {
+    "test_id": "coding",
+    "category": "Core Text",
+    "name": "Coding generation",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "You are a precise Python engineer.",
+    "user_prompt": "Write a Python function `group_articles(items)`.\n\nInput:\nA list of dicts, each dict has:\n- title: string\n- topic: string\n- minutes_read: int\n\nOutput:\nA dict mapping each topic to:\n- count\n- total_minutes\n- longest_title\n\nRequirements:\n- use type hints\n- include docstring\n- handle missing keys safely\n- include a short example",
+    "expected": [
+      "Runnable Python",
+      "Sane handling for missing keys",
+      "Example matches implementation"
+    ],
+    "scoring_focus": "Correctness, completeness, and code hygiene.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": false,
+    "is_experimental": false
+  },
+  "response_text": "```python\nfrom typing import List, Dict, Any, Union\n\ndef group_articles(items: List[Dict[str, Any]]) -> Dict[str, Dict[str, Union[int, str]]]:\n    \"\"\"\n    Groups a list of articles by their topic and calculates summary statistics.\n\n    Args:\n        items: A list of dictionaries. Each dictionary represents an article \n               and may contain 'title' (str), 'topic' (str), and 'minutes_read' (int).\n\n    Returns:\n        A dictionary where keys are topic names and values are dictionaries containing:\n        - 'count': Total number of articles in this topic.\n        - 'total_minutes': Sum of all minutes_read in this topic.\n        - 'longest_title': The title with the greatest character length in this topic.\n\n    Note:\n        Items missing a 'topic' key are skipped. \n        Missing 'title' or 'minutes_read' keys default to empty string and 0 respectively.\n    \"\"\"\n    grouped_data: Dict[str, Dict[str, Union[int, str]]] = {}\n\n    for item in items:\n        # Safely extract topic; skip the item if no topic is",
+  "latency_ms": 53741,
+  "tool_trace": [],
+  "raw_response": {
+    "id": "chatcmpl-zhjmyrhg7yos6ny6fggtq",
+    "object": "chat.completion",
+    "created": 1775388273,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```python\nfrom typing import List, Dict, Any, Union\n\ndef group_articles(items: List[Dict[str, Any]]) -> Dict[str, Dict[str, Union[int, str]]]:\n    \"\"\"\n    Groups a list of articles by their topic and calculates summary statistics.\n\n    Args:\n        items: A list of dictionaries. Each dictionary represents an article \n               and may contain 'title' (str), 'topic' (str), and 'minutes_read' (int).\n\n    Returns:\n        A dictionary where keys are topic names and values are dictionaries containing:\n        - 'count': Total number of articles in this topic.\n        - 'total_minutes': Sum of all minutes_read in this topic.\n        - 'longest_title': The title with the greatest character length in this topic.\n\n    Note:\n        Items missing a 'topic' key are skipped. \n        Missing 'title' or 'minutes_read' keys default to empty string and 0 respectively.\n    \"\"\"\n    grouped_data: Dict[str, Dict[str, Union[int, str]]] = {}\n\n    for item in items:\n        # Safely extract topic; skip the item if no topic is",
+          "reasoning_content": "\n\n*   Input: A list of dictionaries. Each dictionary represents an article with `title` (str), `topic` (str), and `minutes_read` (int).\n    *   Output: A dictionary where keys are topics and values are another dictionary containing `count`, `total_minutes`, and `longest_title`.\n    *   Constraints/Requirements:\n        *   Use type hints.\n        *   Include a docstring.\n        *   Handle missing keys safely (e.g., if `topic` or `minutes_red` is missing).\n        *   Provide an example usage.\n\n    *   Input Type: `list[dict[str, Any]]`.\n    *   Output Type: `dict[str, dict[str, Union[int, str]]]`.\n\n    *   Initialize an empty dictionary `result = {}`.\n    *   Iterate through each item in the input list.\n    *   Safely extract `topic`, `title`, and `minutes_read`.\n        *   If `topic` is missing, what should happen? Usually, we skip or use a \"Unknown\" category. Let's assume we skip items without a topic to keep the grouping meaningful, or default to \"Unknown\". I'll go with skipping/ignoring invalid entries for robustness.\n    *   For each item:\n        *   If `topic` not in `result`:\n            *   Initialize entry: `{\"count\": 0, \"total_minutes\": 0, \"longest_title\": \"\"}`.\n        *   Update `count`: `result[topic][\"count\"] += 1`.\n        *   Update `total_minutes`: `result[topic][\"total_minutes\"] += minutes_read`.\n        *   Update `longest_title`: Compare current `title` length with existing `longest_title` length.\n\n    *   What if `minutes_read` is missing? Default to 0.\n    *   What if `title` is missing? Use an empty string or skip. Let's use an empty string for the title but still count it.\n    *   What if `topic` is missing? Skip the item (cannot group without a key).\n\n    ```python\n    from typing import List, Dict, Any, Union\n\n    def group_articles(items: List[Dict[str, Any]]) -> Dict[str, Dict[str, Union[int, str]]]:\n        \"\"\"\n        Groups articles by topic and calculates statistics.\n        ...\n        \"\"\"\n        grouped = {}\n\n        for item in items:\n            # Safe extraction\n            topic = item.get(\"topic\")\n            if not topic: # Skip if no topic exists\n                continue\n\n            title = item.get(\"title\", \"\")\n            minutes = item.get(\"minutes_read\", 0)\n\n            if topic not in grouped:\n                grouped[topic] = {\n                    \"count\": 0,\n                    \"total_minutes\": 0,\n                    \"longest_title\": \"\"\n                }\n\n            stats = grouped[topic]\n            stats[\"count\"] += 1\n            stats[\"total_minutes\"] += minutes\n\n            if len(title) > len(stats[\"longest_title\"]):\n                stats[\"longest_title\"] = title\n\n        return grouped\n    ```\n\n    *   Type hints? Yes.\n    *   Docstring? Yes.\n    *   Handle missing keys safely? Yes (`get` with defaults).\n    *   Example included? Yes.",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 114,
+      "completion_tokens": 1024,
+      "total_tokens": 1138,
+      "completion_tokens_details": {
+        "reasoning_tokens": 756
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- No specialized auto-review for this test. Use manual scoring.\n- Response length: `1026` characters"
+}

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemma 4 in LM Studio: Companion Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Serif:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #f6f0e4;
+      --paper: #fffaf1;
+      --ink: #1f1b17;
+      --muted: #6b6158;
+      --line: rgba(31, 27, 23, 0.12);
+      --accent: #d3542f;
+      --accent-deep: #8f2f15;
+      --olive: #5e6a35;
+      --gold: #c7952d;
+      --pass: #276749;
+      --fail: #a61b1b;
+      --partial: #9a5c00;
+      --shadow: 0 18px 50px rgba(44, 27, 8, 0.10);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(211,84,47,0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(94,106,53,0.10), transparent 24%),
+        linear-gradient(180deg, #f7f1e5 0%, #efe5d2 100%);
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.6);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero-card,
+    .panel {
+      background: rgba(255, 250, 241, 0.88);
+      border: 1px solid rgba(31, 27, 23, 0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-card {
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -90px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(211,84,47,0.18), transparent 70%);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(211,84,47,0.12);
+      color: var(--accent-deep);
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.2rem, 5vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy {
+      font-family: "IBM Plex Serif", serif;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: #40372f;
+      max-width: 52rem;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid var(--line);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .side-summary {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background:
+        linear-gradient(180deg, rgba(94,106,53,0.08), rgba(255,255,255,0.56)),
+        rgba(255,250,241,0.92);
+    }
+
+    .side-summary h2,
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .section {
+      padding: 28px;
+    }
+
+    .lede {
+      max-width: 60rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .cap-grid,
+    .findings-grid,
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.68);
+      min-height: 170px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .status-table {
+      display: grid;
+      gap: 12px;
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr 1.7fr 110px;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .pass { background: rgba(39,103,73,0.12); color: var(--pass); }
+    .fail { background: rgba(166,27,27,0.10); color: var(--fail); }
+    .partial { background: rgba(154,92,0,0.12); color: var(--partial); }
+
+    .latency {
+      position: relative;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(31,27,23,0.08);
+      overflow: hidden;
+    }
+
+    .latency span {
+      position: absolute;
+      inset: 0 auto 0 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+    }
+
+    .latency-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .visual-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    figure {
+      margin: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      background: #efe5d2;
+    }
+
+    figcaption {
+      padding: 14px 16px 16px;
+      line-height: 1.55;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .artifact-grid a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .artifact {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      transition: transform 120ms ease, border-color 120ms ease;
+    }
+
+    .artifact:hover {
+      transform: translateY(-2px);
+      border-color: rgba(211,84,47,0.35);
+    }
+
+    .artifact strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .footer {
+      margin-top: 26px;
+      padding: 24px 28px;
+      border-radius: 24px;
+      background: #201813;
+      color: rgba(255,250,241,0.92);
+    }
+
+    .footer p {
+      margin: 0;
+      line-height: 1.7;
+      color: rgba(255,250,241,0.72);
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .cap-grid,
+      .findings-grid,
+      .artifact-grid,
+      .visual-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .status-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      figure img {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="nav">
+      <div class="brand">Gemma 4 LM Studio Companion</div>
+      <div class="nav-links">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#tests">Tests</a>
+        <a href="#findings">Findings</a>
+        <a href="#artifacts">Artifacts</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Local Model Evaluation</div>
+        <h1>Gemma 4 in LM Studio, tested in a real local workflow.</h1>
+        <p class="hero-copy">
+          This companion page distills a hands-on benchmark of <strong>google/gemma-4-26b-a4b</strong> running in LM Studio on an Apple M4 Mac mini.
+          The goal was not to repeat model claims, but to test what actually held up under local API-driven use: reasoning, coding, JSON, long-context recall,
+          tool use, multilingual output, and vision.
+        </p>
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>24 GB</strong>
+            Host RAM on the test machine.
+          </div>
+          <div class="metric">
+            <strong>11</strong>
+            Benchmark areas exercised in this session.
+          </div>
+          <div class="metric">
+            <strong>608s</strong>
+            Worst-case latency on long-context finalize.
+          </div>
+        </div>
+      </div>
+
+      <aside class="side-summary panel">
+        <div>
+          <h2>Environment</h2>
+          <div class="chip-list">
+            <span class="chip">Apple M4 Mac mini</span>
+            <span class="chip">macOS 26.3.1</span>
+            <span class="chip">24 GB RAM</span>
+            <span class="chip">LM Studio local API</span>
+            <span class="chip">google/gemma-4-26b-a4b</span>
+          </div>
+        </div>
+
+        <div>
+          <h2>Headline</h2>
+          <p class="lede" style="margin:0;">
+            Strong on reasoning, coding, debugging, multilingual output, and business-style analysis.
+            Weak on strict JSON compliance. Failed in practice on tool-calling completion and long-context finalization.
+            Vision worked best on screenshot-style inputs after resizing and larger token budgets.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="stack">
+      <section class="section panel" id="capabilities">
+        <h2>What Gemma 4 Is About</h2>
+        <p class="lede">
+          Google positions Gemma 4 as a family focused on reasoning, coding, multilingual support, long context,
+          multimodality, and agentic workflows. This benchmark mapped those claims into local LM Studio tests and then
+          evaluated the outcomes against real saved outputs instead of subjective impressions.
+        </p>
+        <div class="cap-grid">
+          <div class="card">
+            <h3>Reasoning</h3>
+            <p>Operational bottlenecks, prioritization, and structured logic were among the strongest areas in the session.</p>
+          </div>
+          <div class="card">
+            <h3>Coding + Debugging</h3>
+            <p>The model produced usable Python and correctly fixed a sliding-window bug, which makes it relevant for local dev assistance.</p>
+          </div>
+          <div class="card">
+            <h3>Structured Output</h3>
+            <p>The semantic classification quality was fine, but strict machine-readable JSON formatting was not reliable enough.</p>
+          </div>
+          <div class="card">
+            <h3>Multilingual Output</h3>
+            <p>Telugu, Hindi, and formal business English came out strong enough to count as practical rather than decorative.</p>
+          </div>
+          <div class="card">
+            <h3>Agentic Workflows</h3>
+            <p>The model discovered the right tools, but it failed to complete the workflow cleanly, looping instead of finishing.</p>
+          </div>
+          <div class="card">
+            <h3>Multimodal Vision</h3>
+            <p>Vision was usable after image resizing and larger output budgets, with screenshot-style understanding noticeably better than real-photo description.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel" id="tests">
+        <h2>What We Tested</h2>
+        <p class="lede">
+          The session combined text, tool, long-context, and vision tasks. The key distinction was not “can the model answer something smart?”
+          but “does it finish the task in a way that is reliable enough for a local workflow?”
+        </p>
+        <div class="status-table">
+          <div class="status-row">
+            <strong>System Prompt Control</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Followed the 3-bullet constraint and closing tag correctly.</div>
+            <div class="latency-label">123.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Reasoning</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Correctly identified the bottleneck and recommended the right operational change.</div>
+            <div class="latency-label">72.5s</div>
+          </div>
+          <div class="status-row">
+            <strong>Coding</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Produced usable Python with types, docstring, and sane missing-key handling.</div>
+            <div class="latency-label">53.7s</div>
+          </div>
+          <div class="status-row">
+            <strong>Debugging</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Fixed the off-by-one bug and added basic input validation.</div>
+            <div class="latency-label">47.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Structured JSON</strong>
+            <span class="status-pill fail">Fail</span>
+            <div>Returned fenced JSON instead of raw JSON-only output.</div>
+            <div class="latency-label">35.3s</div>
+          </div>
+          <div class="status-row">
+            <strong>Multilingual</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Good Telugu, Hindi, and executive-style English rewrite.</div>
+            <div class="latency-label">51.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Business Judgment</strong>
+            <span class="status-pill pass">Pass</span>
+            <div>Concrete analysis without collapsing into generic “it depends” language.</div>
+            <div class="latency-label">55.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Tool Calling</strong>
+            <span class="status-pill fail">Fail</span>
+            <div>Found the right tools, then looped on repeated calendar calls and never produced a final answer.</div>
+            <div class="latency-label">142.3s</div>
+          </div>
+          <div class="status-row">
+            <strong>Long Context</strong>
+            <span class="status-pill fail">Fail</span>
+            <div>Held the multi-turn protocol initially, but returned an empty final synthesis after more than 10 minutes.</div>
+            <div class="latency-label">607.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Screenshot Vision</strong>
+            <span class="status-pill partial">Usable</span>
+            <div>Worked well after resizing the image and increasing token budget.</div>
+            <div class="latency-label">117.9s</div>
+          </div>
+          <div class="status-row">
+            <strong>Real-Photo Vision</strong>
+            <span class="status-pill partial">Partial</span>
+            <div>Started grounded, but truncated early due output-budget pressure.</div>
+            <div class="latency-label">95.8s</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel" id="findings">
+        <h2>What We Found</h2>
+        <p class="lede">
+          The dominant behavior in this session was not model “stupidity.” It was runtime friction. The model often spent a large share of the response
+          budget in hidden reasoning output before visible content appeared. That shaped almost every practical outcome.
+        </p>
+        <div class="findings-grid">
+          <div class="card">
+            <h3>Strong Text Utility</h3>
+            <p>For local reasoning, debugging, coding, and operational analysis, the model was clearly usable and often quite good.</p>
+          </div>
+          <div class="card">
+            <h3>Automation Friction</h3>
+            <p>Strict JSON and end-to-end tool workflows exposed that semantic correctness is not enough if the output format or stopping behavior is unstable.</p>
+          </div>
+          <div class="card">
+            <h3>Latency Cost</h3>
+            <p>Even good answers often arrived slowly enough to matter. This setup is usable, but not comfortable for fast iterative loops.</p>
+          </div>
+          <div class="card">
+            <h3>Vision Is Real</h3>
+            <p>The successful screenshot run confirms that multimodal input is available and useful in this setup, especially for UI comprehension.</p>
+          </div>
+          <div class="card">
+            <h3>Vision Needs Tuning</h3>
+            <p>Image resizing and a larger token budget were necessary just to get stable visible outputs after hidden reasoning consumed the budget.</p>
+          </div>
+          <div class="card">
+            <h3>Practical Bottom Line</h3>
+            <p>This is a good local text assistant in the tested environment, but not yet a reliable automation engine.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Vision Samples</h2>
+        <p class="lede">
+          Two image types were tested because they stress different aspects of local multimodal capability: screenshot/UI comprehension and real-photo scene grounding.
+        </p>
+        <div class="visual-strip">
+          <figure>
+            <img src="assets/download.png" alt="Mermaid editor screenshot used for UI comprehension test">
+            <figcaption>
+              <strong>Screenshot/UI test.</strong> This was the stronger multimodal result. The model correctly identified Mermaid Live Editor,
+              the code pane, the rendered diagram, and the likely workflow context.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="assets/2026-03-30-day1-scene.png.webp" alt="Real photo used for scene-understanding test">
+            <figcaption>
+              <strong>Real-photo test.</strong> The model began with a grounded scene description but truncated early, showing that rich visual analysis
+              was much more sensitive to hidden reasoning and output budget.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section panel" id="artifacts">
+        <h2>Companion Files</h2>
+        <p class="lede">
+          The repo includes the benchmark spec, the evaluator harness, the concise summary, and the raw saved outputs that support the conclusions on this page.
+        </p>
+        <div class="artifact-grid">
+          <a href="gemma4_benchmark_summary.md">
+            <div class="artifact">
+              <strong>Benchmark Summary</strong>
+              Short, publication-ready summary of the final outcomes.
+            </div>
+          </a>
+          <a href="gemma4_lm_studio_benchmark.md">
+            <div class="artifact">
+              <strong>Benchmark Spec</strong>
+              Prompt catalog and test structure used in the session.
+            </div>
+          </a>
+          <a href="gemma4_capability_crosscheck.md">
+            <div class="artifact">
+              <strong>Capability Cross-Check</strong>
+              Mapping between Google’s Gemma 4 claims and the local test plan.
+            </div>
+          </a>
+          <a href="gemma4_lm_studio_eval_app.py">
+            <div class="artifact">
+              <strong>Evaluator Harness</strong>
+              Local API harness used to drive and save the benchmark runs.
+            </div>
+          </a>
+          <a href="eval_results/">
+            <div class="artifact">
+              <strong>Saved Results</strong>
+              Raw JSON outputs from the benchmark session.
+            </div>
+          </a>
+          <a href="README.md">
+            <div class="artifact">
+              <strong>Repo Guide</strong>
+              Quick orientation to the companion repo contents.
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <p>
+        Final takeaway: this tested Gemma setup is genuinely useful for local text-heavy work, but it still needs runtime tuning and stronger orchestration
+        before you would want to trust it for strict automation, tool-based workflows, or heavy long-context synthesis.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

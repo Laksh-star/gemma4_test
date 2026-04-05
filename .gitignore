@@ -1,0 +1,13 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+
+# Working notes and non-public drafts
+chatGPT_chat.md.rtf
+session-report.md
+gemma4_lm_studio_article_draft.md
+gemma4_lm_studio_rtf_audit.md
+
+# Local temp artifacts
+/tmp/

@@ -1,0 +1,60 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T16:53:21",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 1024,
+  "timeout_seconds": 300.0,
+  "test_case": {
+    "test_id": "system_control",
+    "category": "Core Text",
+    "name": "System prompt control",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "You are BriefSpec.\nRules:\n- Answer in exactly 3 bullet points.\n- Never use more than 12 words per bullet.\n- If asked for code, give only pseudocode.\n- End every response with: [BriefSpec]",
+    "user_prompt": "Explain how retrieval-augmented generation works.",
+    "expected": [
+      "Exactly 3 bullets",
+      "Each bullet no more than 12 words",
+      "Ends with [BriefSpec]"
+    ],
+    "scoring_focus": "Instruction following and strict format control.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": false,
+    "is_experimental": false
+  },
+  "response_text": "* Retrieve relevant documents from an external knowledge base.\n* Augment the user prompt with this retrieved information.\n* Generate a response using the combined context and query.\n\n[BriefSpec]",
+  "latency_ms": 123903,
+  "tool_trace": [],
+  "raw_response": {
+    "id": "chatcmpl-5sac398n8o5dgrl27brbzu",
+    "object": "chat.completion",
+    "created": 1775388077,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "* Retrieve relevant documents from an external knowledge base.\n* Augment the user prompt with this retrieved information.\n* Generate a response using the combined context and query.\n\n[BriefSpec]",
+          "reasoning_content": "\n*   Topic: Explain how retrieval-augmented generation (RAG) works.\n    *   Constraint 1: Exactly 3 bullet points.\n    *   Constraint 2: Never use more than 12 words per bullet point.\n    *   Constraint 3: If asked for code, give only pseudocode (not applicable here).\n    *   Constraint 4: End every response with \"[BriefSpec]\".\n\n    *   Point 1: Retrieve relevant documents from an external database or index.\n    *   Point 2: Combine retrieved information with the user's original prompt.\n    *   Point 3: Generate a final answer using the augmented context.\n\n    *   Draft 1:\n        *   Retrieve relevant data from an external knowledge base first. (9 words) - OK.\n        *   Combine this retrieved information with your initial input query. (10 words) - OK.\n        *   The language model generates a response using the provided context. (11 words) - OK.\n\n    *   Draft 2 (Refining for brevity and impact):\n        *   Search external databases for documents relevant to the user prompt. (11 words)\n        *   Inject retrieved information into the model's input context window. (10 words)\n        *   Generate a precise response using both query and retrieved data. (11 words)\n\n    *   Bullet 1: Search external databases for documents relevant to the user prompt. (11 words) - Pass.\n    *   Bullet 2: Inject retrieved information into the model's input context window. (10 words) - Pass.\n    *   Bullet 3: Generate a precise response using both query and retrieved data. (11 words) - Pass.\n\n    Wait, let me double-check word counts.\n    1. Search(1) external(2) databases(3) for(4) documents(5) relevant(6) to(7) the(8) user(9) prompt.(10) -> 10 words.\n    2. Inject(1) retrieved(2) information(3) into(4) the(5) model's(6) input(7) context(8) window.(9) -> 9 words.\n    3. Generate(1) a(2) precise(3) response(4) using(5) both(6) query(7) and(8) retrieved(9) data.(10) -> 10 words.\n\n    *   Exactly 3 bullet points? Yes.\n    *   Max 12 words per bullet? Yes.\n    *   End with [BriefSpec]? Yes.\n\n    Final Polish:\n    * Retrieve relevant documents from an external knowledge base. (9 words)\n    * Augment the user prompt with this retrieved information. (9 words)\n    * Generate a response using the combined context and query. (10 words)\n\n    Let's check word counts again for final version:\n    - Retrieve(1) relevant(2) documents(3) from(4) an(5) external(6) knowledge(7) base.(8) -> 8 words.\n    - Augment(1) the(2) user(3) prompt(4) with(5) this(6) retrieved(7) information.(8) -> 8 words.\n    - Generate(1) a(2) response(3) using(4) the(5) combined(6) context(7) and(8) query.(9) -> 9 words.\n\n    This looks perfect.\n\n    *   Retrieve relevant documents from an external knowledge base.\n    *   Augment the user prompt with this retrieved information.\n    *   Generate a response using the combined context and query.\n\n    [BriefSpec]",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 77,
+      "completion_tokens": 864,
+      "total_tokens": 941,
+      "completion_tokens_details": {
+        "reasoning_tokens": 821
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- Bullet count detected: `3`\n- Bullet word counts: `[8, 8, 9]`\n- Ends with tag: `yes`\n- Response length: `194` characters"
+}

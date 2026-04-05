@@ -1,0 +1,89 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T17:30:12",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 768,
+  "timeout_seconds": 600.0,
+  "test_case": {
+    "test_id": "long_context",
+    "category": "Core Text",
+    "name": "Long-context memory",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "Follow the user's instructions exactly.",
+    "user_prompt": "I will paste a long note in 5 parts.\nDo not summarize until I say: FINALIZE.\nFor each part, reply only with: PART RECEIVED.",
+    "expected": [
+      "Acknowledges each chunk consistently",
+      "Final answer covers early and late sections",
+      "Quotes are grounded in the source text"
+    ],
+    "scoring_focus": "Retention across multiple turns and resistance to recency bias.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": true,
+    "is_experimental": false
+  },
+  "response_text": "",
+  "latency_ms": 607924,
+  "tool_trace": [
+    {
+      "step": "instructions",
+      "assistant": "Understood. Please provide Part 1."
+    },
+    {
+      "step": "chunk_1",
+      "assistant": "PART RECEIVED."
+    },
+    {
+      "step": "chunk_2",
+      "assistant": "PART RECEIVED."
+    },
+    {
+      "step": "chunk_3",
+      "assistant": "PART RECEIVED."
+    },
+    {
+      "step": "chunk_4",
+      "assistant": "PART RECEIVED."
+    },
+    {
+      "step": "chunk_5",
+      "assistant": ""
+    },
+    {
+      "step": "finalize",
+      "assistant": ""
+    }
+  ],
+  "raw_response": {
+    "id": "chatcmpl-b5iwi4u19ckazxwp2wev87",
+    "object": "chat.completion",
+    "created": 1775390259,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "\n*   Input: A long note provided in 5 parts (though only Parts 1-4 were explicitly shown as \"PART X/5\", Part 5 was the final part containing \"FINALIZE\").\n    *   Task: Perform four specific actions based on the *entire* document.\n        1.  Summarize the entire document in exactly 12 bullets.\n        2.  Extract all named people, organizations, and dates.\n        3.  Identify 5 unresolved questions.\n        4.  Quote 3 lines that best capture the core argument.\n\n    *   The content is a collection of test cases, prompts, benchmarks, and evaluation criteria for \"Gemma 4\" (a model family).\n    *   It includes:\n        *   System prompt testing (system-role support, reasoning modes).\n        *   Coding capability tests (Python functions like `moving_avg`, unit tests, debugging).\n        *   Vision/Image understanding tests (extracting headings, trends from charts).\n        *   Instruction following tests (BriefSpec persona: 3 bullets, <12 words per bullet, specific ending tag).\n        *   Information extraction tasks (JSON schema for eye issues, newsroom automation pilots).\n        *   Evaluation metrics (Correctness, Groundedness, etc.).\n        *   A Gradio app description (`gemma4_gradio_eval_app.py`) for running benchmarks in LM Studio.\n    *   Key themes: Testing Gemma 4's capabilities in coding, reasoning, vision, and instruction following; evaluating newsroom automation pilots (Pilot A vs Pilot B); benchmarking via a Python/Gradio app.\n\n    *   *Goal:* 12 bullets summarizing the document.\n    *   Drafting points:\n        1.  Document outlines testing protocols for the Gemma 4 model family.\n        2.  Focuses on native system-role support and configurable reasoning modes.\n        3.  Includes benchmarks for Python coding, debugging, and unit testing.\n        4.  Tests vision capabilities like image text extraction and chart analysis.\n        5.  Evaluates instruction following using the \"BriefSpec\" persona constraints.\n        6.  Proposes AI pilot use cases for newsroom automation workflows.\n        7.  Compares Pilot A (video clipping) with Pilot B (metadata enrichment).\n        8.  Defines evaluation metrics like correctness, groundedness, and stability.\n        9.  Provides JSON schemas for structured data extraction tasks.\n        10. Details a Gradio-based application for running local model evaluations.\n        11. Identifies common failure modes in quantized model outputs.\n        12. Aims to determine if Gemma 4 is production-ready for automation.\n\n    *   Scanning the text:\n        *   People: None mentioned (only generic roles like \"Pilot A\").\n        *   Organizations: Google, LM Studio, Gradio.\n        *   Dates: 9 AM, 10 AM (times), 60 days (duration). No specific calendar dates (e.g., Jan 1st) found.\n\n    *   Scanning the text for questions or gaps:\n        1.  How does quantization drift affect coding accuracy in Gemma 4?\n        2.  Will the \"thinking mode\" work consistently across different LM Studio runtimes?\n        3.  What is the specific ROI of Pilot A versus Pilot B?\n        4.  Is the model's vision capability sufficient for complex, blurry screenshots?\n        5.  How does the newsroom automation pilot impact editorial judgment long-",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2078,
+      "completion_tokens": 768,
+      "total_tokens": 2846,
+      "completion_tokens_details": {
+        "reasoning_tokens": 765
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- Bullet-like lines detected: `0`\n- Quote markers detected: `0`\n- Response length: `0` characters"
+}

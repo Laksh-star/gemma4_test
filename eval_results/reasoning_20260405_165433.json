@@ -1,0 +1,60 @@
+{
+  "app": "Gemma Local Evaluation Lab",
+  "timestamp": "2026-04-05T16:54:33",
+  "api_base": "http://192.168.1.10:1234/v1",
+  "model": "google/gemma-4-26b-a4b",
+  "temperature": 0.2,
+  "max_tokens": 1024,
+  "timeout_seconds": 300.0,
+  "test_case": {
+    "test_id": "reasoning",
+    "category": "Core Text",
+    "name": "Workflow bottleneck reasoning",
+    "execution_path": "Chat UI / API",
+    "system_prompt": "You are a careful operations analyst.",
+    "user_prompt": "A company has 3 teams: Editorial, Video, and AI Ops.\n\nEditorial can review 18 stories per day.\nVideo can package only 12 stories per day.\nAI Ops can enrich metadata for 30 stories per day.\n\n1) What is the bottleneck?\n2) If Editorial improves by 50% but nothing else changes, what happens?\n3) What one operational change would increase total throughput fastest?\nShow your reasoning briefly, then the final answer.",
+    "expected": [
+      "Video is the bottleneck",
+      "Throughput stays capped at 12/day",
+      "Recommendation is to improve video capacity first"
+    ],
+    "scoring_focus": "Arithmetic, bottleneck logic, and prioritization quality.",
+    "requires_image": false,
+    "uses_tools": false,
+    "is_long_context": false,
+    "is_experimental": false
+  },
+  "response_text": "**Reasoning:**\n\n1.  **Bottleneck Identification:** In any linear process, the maximum throughput is determined by the stage with the lowest capacity. Comparing 18 (Editorial), 12 (Video), and 30 (AI Ops), the Video team has the lowest capacity.\n2.  **Impact of Improvement:** Increasing Editorial's capacity from 18 to 27 stories per day does not change the fact that the Video team can still only process 12 stories per day. The system output is constrained by the bottleneck, so total throughput remains stagnant.\n3.  **Optimization Strategy:** According to the Theory of Constraints, an improvement made anywhere other than the bottleneck is an illusion. To increase the total number of completed stories, you must increase the capacity of the Video team.\n\n**Final Answer:**\n\n1) **The bottleneck is Video.**\n2) **Total throughput remains unchanged at 12 stories per day.**\n3) **Increase the capacity of the Video team.**",
+  "latency_ms": 72544,
+  "tool_trace": [],
+  "raw_response": {
+    "id": "chatcmpl-fjy2wg50fdhgug5q8pdbfj",
+    "object": "chat.completion",
+    "created": 1775388201,
+    "model": "google/gemma-4-26b-a4b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "**Reasoning:**\n\n1.  **Bottleneck Identification:** In any linear process, the maximum throughput is determined by the stage with the lowest capacity. Comparing 18 (Editorial), 12 (Video), and 30 (AI Ops), the Video team has the lowest capacity.\n2.  **Impact of Improvement:** Increasing Editorial's capacity from 18 to 27 stories per day does not change the fact that the Video team can still only process 12 stories per day. The system output is constrained by the bottleneck, so total throughput remains stagnant.\n3.  **Optimization Strategy:** According to the Theory of Constraints, an improvement made anywhere other than the bottleneck is an illusion. To increase the total number of completed stories, you must increase the capacity of the Video team.\n\n**Final Answer:**\n\n1) **The bottleneck is Video.**\n2) **Total throughput remains unchanged at 12 stories per day.**\n3) **Increase the capacity of the Video team.**",
+          "reasoning_content": "\n\n*   Team 1 (Editorial): Capacity = 18 stories/day.\n    *   Team 2 (Video): Capacity = 12 stories/day.\n    *   Team 3 (AI Ops): Capacity = 30 stories/day.\n\n    *   The bottleneck is the stage with the lowest capacity, as it limits the entire system's throughput.\n    *   Comparing capacities: 12 < 18 < 30.\n    *   Therefore, Video is the bottleneck.\n\n    *   New Editorial Capacity = $18 \\times (1 + 0.50) = 18 \\times 1.5 = 27$ stories/day.\n    *   Current capacities: Editorial (27), Video (12), AI Ops (30).\n    *   The system throughput is determined by the minimum capacity in the chain.\n    *   $\\min(27, 12, 30) = 12$.\n    *   Result: Total throughput remains unchanged at 12 stories/day because Video is still the bottleneck.\n\n    *   To increase total throughput, I must increase the capacity of the current bottleneck (Video).\n    *   Increasing Editorial or AI Ops will only create more idle time/buffer without increasing final output.\n    *   Therefore, the change must target the Video team's capacity.\n\n    *   Reasoning for Q1: Compare capacities; lowest value is the constraint.\n    *   Reasoning for Q2: Calculate new Editorial capacity and re-evaluate the minimum capacity of the chain.\n    *   Reasoning for Q3: Identify that only increasing the bottleneck (Video) allows the system's total output to rise.",
+          "tool_calls": []
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 125,
+      "completion_tokens": 584,
+      "total_tokens": 709,
+      "completion_tokens_details": {
+        "reasoning_tokens": 372
+      }
+    },
+    "stats": {},
+    "system_fingerprint": "google/gemma-4-26b-a4b"
+  },
+  "auto_review": "- Mentions `video`: `yes`\n- Mentions `12`: `yes`\n- Response length: `923` characters"
+}
