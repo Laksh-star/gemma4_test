@@ -80,27 +80,6 @@ README preview of the live page:
 
 ![Gemma 4 LM Studio companion report home](assets/pages-home-live.png)
 
-## Serving the HTML
-
-The HTML report will not automatically render as a website unless GitHub Pages is enabled for the repository.
-
-This repo is now prepared for that:
-
-- Pages-ready site entrypoint: [docs/index.html](docs/index.html)
-- static assets mirrored under `docs/assets/`
-
-To publish it on GitHub Pages:
-
-1. Open the repository settings on GitHub.
-2. Go to `Pages`.
-3. Set the source to `Deploy from a branch`.
-4. Choose branch `main` and folder `/docs`.
-5. Save.
-
-Expected Pages URL after GitHub finishes publishing:
-
-- `https://laksh-star.github.io/gemma4_test/`
-
 ## Reproducing the Tests
 
 1. Install LM Studio and load a compatible Gemma-family model.
@@ -122,6 +101,6 @@ python3 -m venv .venv
 
 ## Notes
 
-- This repo intentionally excludes the working session report and article draft.
+- Working notes such as the session report and Medium draft are intentionally excluded from the public repo.
 - The raw saved outputs are useful because they show both successes and practical failures.
 - For strict automation use cases, do not assume that semantic correctness is enough; format compliance and completion behavior matter.
